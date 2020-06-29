@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <form [formGroup]="searchForm" (ngSubmit)="doSearch()">
+                <div class="row align-items-start">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="searchQuery"
+                                placeholder="Search Query"
+                                formControlName="searchQ">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-12">
+                        <div class="form-group">
+                            <select class="form-control"
+                                formControlName="source">
+                                <option value="">Search Source</option>
+                                <option *ngFor="let item of searchSources" [value]="item.name">
+                                    {{item.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-12">
+                        <button type="submit" class="btn btn-primary mb-2 btn-search">Search</button>
+                        <div class="loader" *ngIf="searching"></div>
+                    </div>
+                </div> 
+            </form>       
+        </div>
+    </div>
+
+    <div class="row" *ngIf="searchDone">
+        <div class="col-12">
+            <h6 class="mb-3 mt-3 text-muted">Search Result for 
+                <b>{{searchObj.searchQ}}</b> in 
+                <b>{{searchObj.source}}</b>
+            </h6>
+        </div>
+        <div class="col-12"  *ngIf="results.length===0">
+            <div class="card">
+                <div class="card-body">
+                    No Results.
+                </div>
+            </div>
+        </div>
+        <div class="col-12"  *ngIf="results && results.length">
+            <div class="card" *ngFor="let result of results">
+                <div class="card-body">
+                    <a [href]="result.url" target="_blank">
+                        {{result.title || result.story_title}}
+                    </a>
+                    <h6 class="card-subtitle mb-2 mt-2 text-muted"
+                        *ngIf="result.author && result.created_at"
+                        >{{result.author }} on {{result.created_at | date }}</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
